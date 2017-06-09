@@ -1,0 +1,7 @@
+to install npm globally we have to use the command
+
+ sudo npm install npm -g 
+ 
+ then we have to specify the package name if we want install the package globally
+ 
+ sudo npm install -g <pacKage Name>
