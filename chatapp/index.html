@@ -1,0 +1,55 @@
+<html>
+    <head><title>Hello world</title></head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var user;
+      var socket = io();
+       socket.on('message', function(data){
+       	document.getElementById("work").innerHTML = data;
+       });
+        function setUsername(){
+            socket.emit('setUsername', document.getElementById('name').value);
+        };
+        socket.on('newUser',function(data){
+        	user = data.username
+        	document.body.innerHTML = '';
+        	document.body.innerHTML = user;
+        	document.body.innerHTML ='<br>';
+        	document.body.innerHTML = data.message;
+        	document.body.innerHTML = '<br>send any message<br><input type="text" id="message">\
+            <button type="button" name="button" onclick="sendMessage()">Send</button><br>\
+            <span></span><div id="allusers"></div><br>\
+            <div id="message-container"></div>';
+        });
+
+        socket.on('newmsg', function(data){
+            if(user){
+document.getElementById('allusers').innerHTML = 'available users '+data.allusers;
+ document.getElementById('message-container').innerHTML += '<div><b>' + data.user + '</b>: ' + data.message + '</div>';
+            }
+        });
+
+        function sendMessage(){
+            var msg = document.getElementById('message').value;
+            document.getElementById('message').value = '';
+            if(msg){
+                socket.emit('msg', {message: msg, user: user});
+            }
+        }
+        socket.on('exists',function(data)
+        {
+
+        document.body.innerHTML = data;
+        });
+       
+    </script>
+    <body>
+        <div id = "work" ></div>
+        <div id = "userdata"></div>
+        <hr>
+        <div id="error-container"></div>
+        <span>Enter your name to begin your chat</span><hr>
+        <input id="name" type="text" name="name" value="" placeholder="Enter your name!">
+        <button type="button" name="button" onclick="setUsername()">Let me chat!</button>
+    </body>
+</html>

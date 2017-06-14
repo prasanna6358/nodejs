@@ -1,0 +1,40 @@
+<html>
+    <head><title>Hello world</title></head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var user;
+      var socket = io();
+       socket.on('message', function(data){
+       	document.getElementById("work").innerHTML = data;
+       });
+        function setUsername(){
+            socket.emit('setUsername', document.getElementById('name').value);
+        };
+
+        function sendMessage(){
+            var name = document.getElementById('name').value; 
+            var _comment = document.getElementById('comment').value;
+            document.getElementById('name').value = '';
+            document.getElementById('comment').value = '';
+            if(_comment){
+                socket.emit('commentdata', {message: _comment, user: name});
+            }
+        }
+        socket.on('allcomments',function(data)
+        {
+
+        document.body.innerHTML = data;
+        });
+       
+    </script>
+    <body>
+        <div id = "work" ></div>
+        
+        <hr>
+        <div id="error-container"></div>
+        <span>Enter your name to begin your chat</span><hr>
+        <input id="name" type="text" name="name" value="" placeholder="Enter your name!">
+        <input id="comment" type="text" name="name" value="" placeholder="Enter your comment!">
+        <button type="button" name="button" onclick="sendMessage()">Let me comment!</button>
+    </body>
+</html>
