@@ -1,0 +1,8 @@
+for no in {15..100..3}
+do
+echo "$no "
+done
+exit 0
+
+
+

@@ -1,0 +1,4 @@
+while true
+do
+echo "this is infinite loop, press ctrl+c to exit"
+done

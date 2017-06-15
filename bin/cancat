@@ -1,0 +1,7 @@
+echo "Your first name please:"
+read fname
+echo "Your second name please:"
+read lname
+echo "Your sir name please:"
+read sir
+echo "Hello $sir $fname $lname, Lets begin together!"

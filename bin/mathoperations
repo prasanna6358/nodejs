@@ -1,0 +1,38 @@
+echo "choose operation add,sub.mul,div"
+s1="add"
+s2="sub"
+s3="mul"
+s4="div"
+read operation 
+if [ "$s1" == "$operation" ]; 
+   then
+     echo "enter first value"
+     read value1
+     echo "enter second value"
+     read value2
+     sum=$((value1 + value2))
+     echo "result is: $sum"
+elif [ "$s2" == "$operation" ]
+then
+     echo "enter first value"
+     read value1
+     echo "enter second value"
+     read value2
+     sub=$((value1 - value2))
+     echo "result is: $sub"
+elif [ "$s3" == "$operation" ]
+then
+     echo "enter first value"
+     read value1
+     echo "enter second value"
+     read value2
+     mul=$((value1 * value2))
+     echo "result is: $mul"
+else 
+     echo "enter first value"
+     read value1
+     echo "enter second value"
+     read value2
+     div=$((value1 / value2))
+     echo "result is: $div" 
+  fi
