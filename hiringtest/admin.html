@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>admin page</title>
+<body>
+	<h1>Welcome to the admin page</h1>
+</body>
+</head>
+</html>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+       socket.on('message', function(data){
+        document.getElementById("work").innerHTML = data;
+       });
+</script>
