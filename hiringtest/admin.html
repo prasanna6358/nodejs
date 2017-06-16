@@ -1,19 +1,79 @@
 <html>
 <head>
-	<title>admin page</title>
-<body>
-	<h1>Welcome to the admin page</h1>
-</body>
+	<title>admin</title>
 </head>
-</html>
+<body bgcolor="#7FFFD4">
+<style>
+  .questionclass{
+  	font-weight: bold;
+  }
 
+</style>
+<h1 style="align-content: center;">User results</h1>
+<span id='work'></span>
+<hr>
+<div>
+<span>Enter the EmaiId of the user to get Result</span></br></br>
+<input type="text" id="email" placeholder="Email is case sensitive" required="true" /> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<input id="button" type="button" name="button" value="getUserDetails" onclick="validateEmail()">
+<div id="_nameemail"></div>
+</div>
+<hr>
+<span id="spantable">
 
+</span>
 
-<script src="/socket.io/socket.io.js"></script>
+ <script src="/socket.io/socket.io.js"></script>
 
     <script>
       var socket = io();
        socket.on('message', function(data){
         document.getElementById("work").innerHTML = data;
        });
+        function getUserData()
+        {
+           var _email = document.getElementById('email').value;
+           socket.emit('adminsendemail',{email:_email});
+           document.getElementById('email').value = ''; 
+       }
+        
+     socket.on('adminuserdata',function(data)
+      {
+      	console.log(data.result.length);
+      	if(data.result.length>0){
+      		var _nameemail = '';
+      	 _nameemail = _nameemail+'<h3>USERNAME:'+data.result[0].username+'</h3>';
+      	 _nameemail = _nameemail+'<h3>USER EMAIL:'+data.result[0].userEmail+'</h3>';
+      	 document.getElementById('_nameemail').innerHTML = _nameemail;
+       	var str  = '<table id="userTableData">';
+       	for(var i=0;i<=9;i++)
+       	{
+       	str = str+'<tr><td class="questionclass">'+ data.result[0].questionAnswers[i]._question+'</td></tr>';
+       	str = str+'<tr><td class = "answerclass">&nbsp;&nbsp;&nbsp;&nbsp;'+ data.result[0].questionAnswers[i]._answer+'</td></tr>';
+       	str = str+'<tr></tr><tr></tr>';
+       	}
+       	str = str+'</table>';
+       	document.getElementById('email').value = '';
+        document.getElementById('spantable').innerHTML = str;
+        }
+        else
+        	alert('no user associated with this email');
+    });
+function validateEmail() {
+
+            var email = document.getElementById('email').value;  
+            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+          
+            if (reg.test(email) == false) 
+            {
+            	document.getElementById('email').value = '';
+                alert('Invalid Email Address');
+                return (false);
+            }
+            else getUserData();
+ }
+
+
 </script>
+</body>
+</html>

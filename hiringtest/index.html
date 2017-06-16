@@ -37,8 +37,9 @@
     <body bgcolor="#98FB98">
         <hr>
         <span><b style="color: #808000;">ENTER YOUR NAME AND EMAIL TO BEGIN TEST</b></span><hr>
-        <input id="name" type="text" name="name" id="username" value="" required placeholder="Enter your name!">
+        <input id="name" type="text" name="name" id="username" value="" required placeholder="Enter your fully qualified name!"><span id="errorName"></span>
         <input id="email" type="textarea" name="email" id="email" value="" required placeholder="Enter your email!">
+        <span id="errorEmail"></span>
         <span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;your session will expire in <b><span id="time" style="color:red;"></span></b><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span id="work"></span>
         </br>
         <hr>
@@ -94,15 +95,13 @@
     <span>
     <input class="answer" type="text" border="0" name="answer" id='answer10' required placeholder="Enter your answer!"><span>
     <br><br><br>
-    <b><input id="button" type="button" name="button" value="submit all" onclick="sendComment()"></b>
+    <b><input id="button" type="button" name="button" value="submit all" onclick="validateEmail()"></b>
     </p>
 </div>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 
  <script src="/socket.io/socket.io.js"></script>
 
     <script>
-    var user;
       var socket = io();
        socket.on('message', function(data){
         document.getElementById("work").innerHTML = data;
@@ -122,19 +121,16 @@ return 'Sure?';
 };
 
 var today = new Date();
-
-today.setHours(today.getHours()+1);
+//today.setMinutes(today.getMinutes()+30);//uncomment if you want to set time in minutes and comment below hours.
+//specify minutes number
+today.setHours(today.getHours()+1);//time now set in hours
 
 var countDown = today.getTime();
 
+
 var x = setInterval(function() {
-
-
   var now = new Date().getTime();
-
-
   var distance = countDown - now;
-
     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -142,7 +138,6 @@ var x = setInterval(function() {
     document.getElementById("time").innerHTML = days + "d " + hours + "h "
     + minutes + "m " + seconds + "s ";
     
-    //If the count down is over, write some text 
     if (distance < 0) {
         clearInterval(x);
         document.getElementById("time").innerHTML = "EXPIRED";
@@ -150,10 +145,35 @@ var x = setInterval(function() {
 }, 1000);
 
 
-//functioning
+
+function validateEmail() {
+            var userName = document.getElementById('name').value;
+            if(userName==null)
+            {
+             document.getElementById('errorName').textContent = 'this field is required';
+              return (false);  
+            }
+            var email = document.getElementById('email').value; 
+            if(email==null)
+            {
+              document.getElementById('errorEmail').textContent = 'this field is required';
+               return (false);
+            }
+            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+          
+             if (reg.test(email) == false) 
+            {
+              document.getElementById('email').value = '';
+                alert('Invalid Email Address');
+                return (false);
+            }
+            else submitData();
+ }
 
 
-function sendComment(){
+
+
+function submitData(){
 var questionanswers = [];
 
 
@@ -176,6 +196,12 @@ if(userName!=''&&userEmail!=''&&questionanswers.length>0){
                 console.log('executed');
             }
 }
+
+socket.on('sendConfirmation',function(data)
+{
+  alert(data);
+   console.log('index' +data);
+});
 
 </script>
 </body>
