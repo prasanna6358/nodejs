@@ -1,0 +1,46 @@
+<html>
+    <head><title>Hello world</title></head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var user;
+      var socket = io();
+       socket.on('message', function(data){
+       	document.getElementById("work").innerHTML = data;
+       });
+
+        function sendComment(){
+            var name = document.getElementById('name').value; 
+            var _comment = document.getElementById('comment').value;
+            document.getElementById('name').value = '';
+            document.getElementById('comment').value = '';
+            if(_comment){
+                socket.emit('commentdata', {message: _comment, user: name});
+            }
+        }
+        socket.on('allcomments',function(data)
+        {
+            var str = '<span><b style="color:red;">blog comments by users</b></span></br><hr>';
+            for(var i=0;i<data.result.length;i++)
+            {
+                console.log(data.result.length);
+                var username  = data.result[i].name;
+                var usercomment = data.result[i].comment;
+                str = str+'<b style="color:blue;">'+username+'</b><span>:&nbsp;</span>';
+                str = str+'<span style="color:#999966;">'+usercomment+'</span></br></br>';
+            }
+        document.getElementById('chatinfo').innerHTML = str;
+        });
+       
+    </script>
+    <body>
+        <div id = "work" ></div>
+        
+        <hr>
+        <div id="error-container"></div>
+        <span>Enter your name to comment</span><hr>
+        <input id="name" type="text" name="name" value="" required placeholder="Enter your name!">
+        <input id="comment" type="textarea" name="name" value="" required placeholder="Enter your comment!">
+        <button type="button" name="button" onclick="sendComment()">Let me comment!</button><br><br>
+        <div id="chatinfo"<div>
+    </body>
+</html>
