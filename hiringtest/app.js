@@ -50,7 +50,7 @@ io.on('connection', function(socket) {
     {
       console.log('user exist in database');
       socket.emit('sendConfirmation','you have already submitted your answers with the email id '+emailresult[0].userEmail);
-
+      db.close();
     }
   }
     else{
@@ -60,11 +60,11 @@ io.on('connection', function(socket) {
     console.log(result);
     console.log('user not exist in database');
     socket.emit('sendConfirmation','You have submitted your answers successfully');
+    db.close();
             })
         }
      })
-    db.close();
-  })
+   })
   });
 
       socket.on('adminsendemail',function(data) 
